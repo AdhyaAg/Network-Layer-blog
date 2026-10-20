@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beyond the Screen: Understanding the Network Layer</title>
+<meta name="author" content="Adhya Agarwal">
+<meta name="description" content="Compact interactive guide to the Network Layer: IP, ICMP, routing, RIP, OSPF and BGP.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="progress" aria-hidden="true"></div>
+
+<header class="nav" id="top">
+  <a class="brand" href="#hero"><span class="dot"></span>Network Layer</a>
+  <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  <nav id="navLinks" aria-label="Main">
+    <a href="#toc">Contents</a><a href="#vc">Switching</a><a href="#ip">IP</a><a href="#icmp">ICMP</a>
+    <a href="#routing">Routing</a><a href="#lab">Lab</a><a href="#glossary">Glossary</a>
+  </nav>
+</header>
+
+<section class="hero" id="hero">
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <p class="eyebrow">Unit 4 · Network Layer</p>
+    <h1>Beyond the Screen: <span class="grad">Understanding the Network Layer</span></h1>
+    <p class="sub">From IP addresses to intelligent routing, explore how data travels across the Internet.</p>
+    <p class="byline">By <b>Adhya Agarwal</b> <span class="sep">•</span> PRN: <b>24070126012</b></p>
+    <a class="btn" href="#toc" id="startBtn">Start reading ↓</a>
+  </div>
+</section>
+
+<main>
+<section id="toc" class="wrap">
+  <h2>Contents</h2>
+  <ol class="toc-grid">
+    <li><a href="#vc">Switching</a></li><li><a href="#ip">IP &amp; IPv4</a></li><li><a href="#ipv6">IPv6</a></li>
+    <li><a href="#icmp">ICMP</a></li><li><a href="#routing">Routing</a></li><li><a href="#rip">RIP</a></li>
+    <li><a href="#ospf">OSPF</a></li><li><a href="#bgp">BGP</a></li><li><a href="#lab">Lab</a></li>
+    <li><a href="#glossary">Glossary</a></li><li><a href="#references">References</a></li>
+  </ol>
+</section>
+
+<section id="vc" class="wrap article">
+  <h2>Switching</h2>
+  <p>The network layer moves packets from source to destination. A <b>virtual circuit</b> sets up a logical path first, reserves buffers and bandwidth, and delivers packets in order. A <b>datagram</b> network reserves nothing: each packet is routed independently, so packets may arrive out of order and the destination reorders them.</p>
+  <figure class="diagram flow-fig"><div class="flow-title">Virtual circuit</div><div class="flow"><div class="fn"><small>1</small><b>Set-up</b></div><span class="fa">➜</span><div class="fn"><small>2</small><b>Data transfer</b></div><span class="fa">➜</span><div class="fn"><small>3</small><b>Teardown</b></div></div></figure>
+  <figure class="diagram flow-fig"><div class="flow-title">Datagram</div><div class="flow"><div class="fn"><small>1</small><b>Split</b></div><span class="fa">➜</span><div class="fn"><small>2</small><b>Route each packet</b></div><span class="fa">➜</span><div class="fn"><small>3</small><b>Reorder at destination</b></div></div></figure>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Aspect</th><th>Datagram</th><th>Virtual circuit</th></tr></thead>
+    <tbody>
+      <tr><td>Connection</td><td>None</td><td>Established</td></tr>
+      <tr><td>Route</td><td>Per packet</td><td>Whole conversation</td></tr>
+      <tr><td>Order</td><td>Not guaranteed</td><td>Preserved</td></tr>
+      <tr><td>Used in</td><td>IP networks</td><td>ATM networks</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="ip" class="wrap article">
+  <h2>IP &amp; IPv4</h2>
+  <p>IP delivers packets between hosts using IP addresses. A packet has a <b>header</b> (addresses, TTL, checksum) and a <b>payload</b>. A router reads the destination address and consults its routing table for the next hop. An IPv4 address is 32 bits in four octets, such as <code>192.168.0.1</code>, and falls into classes A–E by its first bits.</p>
+  <figure class="diagram flow-fig"><div class="flow-title">Class finder</div><div class="flow">
+    <div class="fn"><b>0…</b>Class A</div><span class="fa">➜</span><div class="fn"><b>10…</b>Class B</div><span class="fa">➜</span><div class="fn"><b>110…</b>Class C</div><span class="fa">➜</span><div class="fn"><b>1110…</b>Class D</div><span class="fa">➜</span><div class="fn"><b>1111…</b>Class E</div>
+  </div></figure>
+  <h3>IPv4 header: click a field</h3>
+  <div id="hdrGrid" class="hdr-grid" role="group" aria-label="IPv4 header fields"></div>
+  <div id="hdrInfo" class="info" aria-live="polite">Select a field.</div>
+</section>
+
+<section id="ipv6" class="wrap article">
+  <h2>IPv6</h2>
+  <p>IPv6 uses 128-bit hexadecimal addresses (eight groups separated by colons), a simpler header, traffic class and flow label for real-time traffic, and built-in security. It supports unicast, multicast and anycast, and solves IPv4 address exhaustion.</p>
+</section>
+
+<section id="icmp" class="wrap article">
+  <h2>ICMP</h2>
+  <p>ICMP reports errors and diagnostics for IP. <b>Ping</b> sends echo requests and times the replies; <b>traceroute</b> reveals the route. Attackers abuse it for ping floods, Smurf attacks and the ping of death.</p>
+  <figure class="diagram flow-fig"><div class="flow-title">Ping</div><div class="flow"><div class="fn"><small>1</small><b>Echo request</b>Type 8</div><span class="fa">➜</span><div class="fn"><small>2</small><b>Echo reply</b>Type 0</div><span class="fa">➜</span><div class="fn"><small>3</small><b>Round-trip time</b></div></div></figure>
+  <div id="icmpBtns" class="chips"></div>
+  <div id="icmpInfo" class="info" aria-live="polite">Select a type.</div>
+</section>
+
+<section id="routing" class="wrap article">
+  <h2>Routing</h2>
+  <p>Routing algorithms compute the least-cost path. <b>Link-state</b> routing floods LSAs so every router builds a full map, then runs Dijkstra’s SPF to fill its forwarding table. It converges fast but needs more memory.</p>
+  <figure class="diagram flow-fig"><div class="flow-title">Algorithm types</div><div class="flow"><div class="fn"><b>Routing</b></div><span class="fa">➜</span><div class="flowcol"><div class="fn"><b>Adaptive</b></div><div class="fn"><b>Non-adaptive</b></div><div class="fn"><b>Hybrid</b></div></div></div></figure>
+  <figure class="diagram flow-fig"><div class="flow-title">Link-state loop</div><div class="flow"><div class="fn"><small>1</small><b>Hello</b></div><span class="fa">➜</span><div class="fn"><small>2</small><b>Flood LSAs</b></div><span class="fa">➜</span><div class="fn"><small>3</small><b>SPF</b></div><span class="fa">➜</span><div class="fn"><small>4</small><b>Update</b></div></div></figure>
+</section>
+
+<section id="rip" class="wrap article">
+  <h2>RIP</h2>
+  <p>RIP is a distance-vector protocol using hop count (maximum 15). Routers broadcast tables every 30 seconds; routes unrefreshed for 180 seconds are dropped. RIPv2 adds subnet masks, multicast and authentication; RIPng supports IPv6.</p>
+  <figure class="diagram flow-fig"><div class="flow-title">Route update</div><div class="flow"><div class="fn"><b>Update</b></div><span class="fa">➜</span><div class="fn fd"><span>Shorter?</span></div><span class="fl yes">Yes: update</span><span class="fa">➜</span><div class="fn fd"><span>Stable?</span></div><span class="fl yes">Wait, then update</span><span class="fa">➜</span><div class="fn"><b>180 s silent</b>Drop</div></div></figure>
+</section>
+
+<section id="ospf" class="wrap article">
+  <h2>OSPF</h2>
+  <p>OSPF is a link-state protocol inside an autonomous system. Neighbours exchange Hello packets and LSAs, then run SPF. On broadcast networks the highest priority, then highest Router ID, becomes DR; the BDR is its backup.</p>
+  <figure class="diagram flow-fig"><div class="flow-title">Neighbour states</div><div class="flow"><div class="fn"><b>Down</b></div><span class="fa">➜</span><div class="fn"><b>Init</b></div><span class="fa">➜</span><div class="fn"><b>Two-Way</b></div><span class="fa">➜</span><div class="fn"><b>ExStart</b></div><span class="fa">➜</span><div class="fn"><b>Exchange</b></div><span class="fa">➜</span><div class="fn"><b>Loading</b></div><span class="fa">➜</span><div class="fn"><b>Full</b></div></div></figure>
+  <div id="ospfBtns" class="chips"></div>
+  <div id="ospfInfo" class="info" aria-live="polite">Select a state.</div>
+</section>
+
+<section id="bgp" class="wrap article">
+  <h2>BGP</h2>
+  <p>BGP routes between autonomous systems. Peers exchange reachability information and path attributes, store routes, and prefer the shortest path. EBGP links different systems; IBGP links routers within one.</p>
+  <figure class="diagram flow-fig"><div class="flow-title">BGP peering</div><div class="flow"><div class="fn"><small>1</small><b>Discover</b></div><span class="fa">➜</span><div class="fn"><small>2</small><b>Store</b></div><span class="fa">➜</span><div class="fn"><small>3</small><b>Select</b></div></div></figure>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Property</th><th>RIP</th><th>OSPF</th><th>BGP</th></tr></thead>
+    <tbody>
+      <tr><td>Algorithm</td><td>Distance vector</td><td>Link state</td><td>Path vector</td></tr>
+      <tr><td>Scope</td><td>Small networks</td><td>Within an AS</td><td>Between ASs</td></tr>
+      <tr><td>Metric</td><td>Hop count</td><td>Link cost</td><td>Path attributes</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="lab" class="wrap">
+  <h2>Interactive lab</h2>
+  <p class="lead sim-flag">Simulations only; no real traffic.</p>
+  <div class="panel" id="journey">
+    <h3>Packet journey</h3>
+    <svg id="journeySvg" viewBox="0 0 720 300" role="img" aria-label="Packet travelling from a computer through routers to a server"></svg>
+    <div class="controls">
+      <button class="btn small" id="sendBtn">▶ Send packet</button>
+      <button class="btn small ghost" id="resetBtn">↺ Reset</button>
+      <label>TTL <input type="number" id="ttlInput" value="8" min="1" max="20"></label>
+    </div>
+    <div class="info" id="journeyLog" aria-live="polite">Press send.</div>
+  </div>
+  <div class="panel" id="calc">
+    <h3>IPv4 calculator</h3>
+    <div class="controls">
+      <input type="text" id="ipInput" value="192.168.0.1" placeholder="e.g. 14.23.120.8" aria-label="IPv4 address" autocomplete="off">
+      <button class="btn small" id="ipBtn">Analyse</button>
+    </div>
+    <div id="ipOut" class="info" aria-live="polite"></div>
+  </div>
+  <div class="panel" id="sim">
+    <h3>Dijkstra simulator</h3>
+    <svg id="graphSvg" viewBox="0 0 720 320" role="img" aria-label="Weighted network graph"></svg>
+    <div class="controls">
+      <label>From <select id="srcSel"></select></label>
+      <label>To <select id="dstSel"></select></label>
+      <button class="btn small" id="runBtn">Find path</button>
+    </div>
+    <div class="info" id="dijResult" aria-live="polite"></div>
+    <ol class="log" id="dijLog"></ol>
+  </div>
+</section>
+
+<section id="casestudy" class="wrap article">
+  <h2>Case study: opening a website</h2>
+  <figure class="diagram flow-fig"><div class="flow"><div class="fn"><small>1</small><b>Packetise</b></div><span class="fa">➜</span><div class="fn"><small>2</small><b>Router lookup</b></div><span class="fa">➜</span><div class="fn"><small>3</small><b>OSPF / RIP</b></div><span class="fa">➜</span><div class="fn"><small>4</small><b>BGP</b></div><span class="fa">➜</span><div class="fn"><small>5</small><b>Reorder</b></div></div></figure>
+</section>
+
+<section id="glossary" class="wrap">
+  <h2>Glossary</h2>
+  <input type="search" id="glossSearch" placeholder="Search…" aria-label="Search glossary">
+  <div id="glossList" class="gloss"></div>
+  <p id="glossEmpty" class="note" hidden>No match.</p>
+</section>
+
+<section id="references" class="wrap article">
+  <h2>References</h2>
+  <ul class="refs">
+    <li><a href="https://www.cloudflare.com/learning/network-layer/what-is-the-network-layer/" target="_blank" rel="noopener">Cloudflare: network layer</a></li>
+    <li><a href="https://www.cloudflare.com/learning/network-layer/what-is-routing/" target="_blank" rel="noopener">Cloudflare: routing</a></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc791.html" target="_blank" rel="noopener">RFC 791 IPv4</a></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc8200.html" target="_blank" rel="noopener">RFC 8200 IPv6</a></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc792.html" target="_blank" rel="noopener">RFC 792 ICMP</a></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc1058.html" target="_blank" rel="noopener">RFC 1058 RIP</a></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc2328.html" target="_blank" rel="noopener">RFC 2328 OSPF</a></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc4271.html" target="_blank" rel="noopener">RFC 4271 BGP</a></li>
+  </ul>
+</section>
+</main>
+
+<footer>
+  <p class="author-card">Written by <b>Adhya Agarwal</b> &middot; PRN <b>24070126012</b></p>
+  <p><a href="#top">Back to top ↑</a></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
